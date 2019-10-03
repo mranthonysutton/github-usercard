@@ -3,14 +3,15 @@
            https://api.github.com/users/<your name>
 */
 
-axios
-  .get("https://api.github.com/users/mranthonysutton")
-  .then(response => {
-    console.log(response);
-  })
-  .catch(error => {
-    console.log("Error obtaining dataset: ", error);
-  });
+// Obtain GitHub API using axios
+// axios
+//   .get("https://api.github.com/users/mranthonysutton")
+//   .then(response => {
+//     console.log(response);
+//   })
+//   .catch(error => {
+//     console.log("Error obtaining dataset: ", error);
+//   });
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
@@ -54,6 +55,56 @@ const followersArray = [];
 </div>
 
 */
+
+function githubProfile() {
+  const cardContainer = document.querySelector(".cards"),
+    card = document.createElement("div"),
+    profileImg = document.createElement("img"),
+    cardInformation = document.createElement("div"),
+    profileName = document.createElement("h3"),
+    userName = document.createElement("p"),
+    location = document.createElement("p"),
+    profileLinkContainer = document.createElement("p"),
+    profileURL = document.createElement("a"),
+    followers = document.createElement("p"),
+    following = document.createElement("p"),
+    bio = document.createElement("p");
+
+  // Add Classes
+  card.classList.add("card");
+  cardInformation.classList.add("card-info");
+  profileName.classList.add("name");
+  userName.classList.add("username");
+
+  // Content
+  profileImg.src = "https://source.unsplash.com/600x600/?headshot,man";
+  profileName.textContent = "Anthony Sutton";
+  userName.textContent = "mranthonysutton";
+  location.textContent = "Location: Las Vegas, NV";
+  profileLinkContainer.textContent = "Profile: ";
+  profileURL.textContent = `profileLinkURLGOESHERE`;
+  followers.textContent = "Followers: 5";
+  following.textContent = "Following: 7";
+  bio.textContent =
+    "Percolator sit percolator doppio irish steamed con panna et aroma, at coffee strong est extra at americano aromatic. Froth acerbic cup aroma barista caramelization white roast, mug spoon carajillo grinder wings single origin coffee and crema trifecta aroma. Beans organic cappuccino rich crema, flavour, espresso fair trade aftertaste affogato siphon froth foam skinny so aged that extraction.";
+
+  // Append Items
+  cardContainer.appendChild(card);
+  card.appendChild(profileImg);
+  card.appendChild(cardInformation);
+  cardInformation.appendChild(profileName);
+  cardInformation.appendChild(userName);
+  cardInformation.appendChild(location);
+  cardInformation.appendChild(profileLinkContainer);
+  profileLinkContainer.appendChild(profileURL);
+  cardInformation.appendChild(followers);
+  cardInformation.appendChild(following);
+  cardInformation.appendChild(bio);
+
+  return card;
+}
+
+githubProfile();
 
 /* List of LS Instructors Github username's: 
   tetondan
