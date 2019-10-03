@@ -4,14 +4,17 @@
 */
 
 // Obtain GitHub API using axios
-// axios
-//   .get("https://api.github.com/users/mranthonysutton")
-//   .then(response => {
-//     console.log(response);
-//   })
-//   .catch(error => {
-//     console.log("Error obtaining dataset: ", error);
-//   });
+api = axios
+  .get("https://api.github.com/users/mranthonysutton")
+  .then(response => {
+    console.log(response);
+    const cardGenerator = githubProfile(response);
+    const cardContainer = document.querySelector(".cards");
+    cardContainer.appendChild(cardGenerator);
+  })
+  .catch(error => {
+    console.log("Error obtaining dataset: ", error);
+  });
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
@@ -34,7 +37,13 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = [
+  "rsnyman",
+  "codeOfTheFuture",
+  "rajaii",
+  "brudnak",
+  "tetondan"
+];
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -56,9 +65,8 @@ const followersArray = [];
 
 */
 
-function githubProfile() {
-  const cardContainer = document.querySelector(".cards"),
-    card = document.createElement("div"),
+function githubProfile(githubAPI) {
+  const card = document.createElement("div"),
     profileImg = document.createElement("img"),
     cardInformation = document.createElement("div"),
     profileName = document.createElement("h3"),
@@ -77,19 +85,17 @@ function githubProfile() {
   userName.classList.add("username");
 
   // Content
-  profileImg.src = "https://source.unsplash.com/600x600/?headshot,man";
-  profileName.textContent = "Anthony Sutton";
-  userName.textContent = "mranthonysutton";
-  location.textContent = "Location: Las Vegas, NV";
-  profileLinkContainer.textContent = "Profile: ";
-  profileURL.textContent = `profileLinkURLGOESHERE`;
-  followers.textContent = "Followers: 5";
-  following.textContent = "Following: 7";
-  bio.textContent =
-    "Percolator sit percolator doppio irish steamed con panna et aroma, at coffee strong est extra at americano aromatic. Froth acerbic cup aroma barista caramelization white roast, mug spoon carajillo grinder wings single origin coffee and crema trifecta aroma. Beans organic cappuccino rich crema, flavour, espresso fair trade aftertaste affogato siphon froth foam skinny so aged that extraction.";
+  profileImg.src = githubAPI.data.avatar_url;
+  profileName.textContent = githubAPI.data.name;
+  userName.textContent = githubAPI.data.login;
+  location.textContent = `Location: ${githubAPI.data.location}`;
+  profileLinkContainer.textContent = `Profile: `;
+  profileURL.textContent = githubAPI.data.html_url;
+  followers.textContent = `Followers: ${githubAPI.data.followers}`;
+  following.textContent = `Following: ${githubAPI.data.following}`;
+  bio.textContent = githubAPI.data.bio;
 
   // Append Items
-  cardContainer.appendChild(card);
   card.appendChild(profileImg);
   card.appendChild(cardInformation);
   cardInformation.appendChild(profileName);
@@ -103,8 +109,6 @@ function githubProfile() {
 
   return card;
 }
-
-githubProfile();
 
 /* List of LS Instructors Github username's: 
   tetondan
