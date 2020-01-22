@@ -3,6 +3,43 @@
            https://api.github.com/users/<your name>
 */
 
+// Obtain GitHub API using axios
+api = axios
+  .get("https://api.github.com/users/mranthonysutton")
+  .then(response => {
+    const cardGenerator = githubProfile(response);
+    const cardContainer = document.querySelector(".cards");
+    cardContainer.appendChild(cardGenerator);
+  })
+  .catch(error => {
+    console.log("Error obtaining dataset: ", error);
+  });
+
+// Followers axios
+followersAPI = axios
+  .get("https://api.github.com/users/mranthonysutton/followers")
+  .then(response => {
+    // Push each URL to the empty array
+    for (let i = 0; i < response.data.length; i++) {
+      followersArray.push(response.data[i].url);
+    }
+
+    // Pass in each URL, and create a .get functionality for each new URL passed in.
+    followersArray.forEach(arrayItem => {
+      printAPI = axios
+        .get(arrayItem)
+        .then(response => {
+          const cardGenerator = githubProfile(response);
+          const cardContainer = document.querySelector(".cards");
+          cardContainer.appendChild(cardGenerator);
+        })
+        .catch(error => console.log(error));
+    });
+  })
+  .catch(error => {
+    console.log("Error obtaining followers data", error);
+  });
+
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
    data in order to use it to build your component function 
@@ -45,6 +82,53 @@ const followersArray = [];
 </div>
 
 */
+
+function githubProfile(githubAPI) {
+  const card = document.createElement("div"),
+    profileImg = document.createElement("img"),
+    cardInformation = document.createElement("div"),
+    profileName = document.createElement("h3"),
+    userName = document.createElement("p"),
+    location = document.createElement("p"),
+    profileLinkContainer = document.createElement("p"),
+    profileURL = document.createElement("a"),
+    followers = document.createElement("p"),
+    following = document.createElement("p"),
+    bio = document.createElement("p");
+
+  // Add Classes
+  card.classList.add("card");
+  cardInformation.classList.add("card-info");
+  profileName.classList.add("name");
+  userName.classList.add("username");
+
+  // Add Content
+  profileImg.src = githubAPI.data.avatar_url;
+  profileName.textContent = githubAPI.data.name;
+  userName.textContent = githubAPI.data.login;
+  location.textContent = `Location: ${githubAPI.data.location}`;
+  profileLinkContainer.textContent = `Profile: `;
+  profileURL.textContent = githubAPI.data.html_url;
+  profileURL.href = githubAPI.data.html_url;
+  profileURL.target = "_blank";
+  followers.textContent = `Followers: ${githubAPI.data.followers}`;
+  following.textContent = `Following: ${githubAPI.data.following}`;
+  bio.textContent = githubAPI.data.bio;
+
+  // Append Items
+  card.appendChild(profileImg);
+  card.appendChild(cardInformation);
+  cardInformation.appendChild(profileName);
+  cardInformation.appendChild(userName);
+  cardInformation.appendChild(location);
+  cardInformation.appendChild(profileLinkContainer);
+  profileLinkContainer.appendChild(profileURL);
+  cardInformation.appendChild(followers);
+  cardInformation.appendChild(following);
+  cardInformation.appendChild(bio);
+
+  return card;
+}
 
 /* List of LS Instructors Github username's: 
   tetondan
